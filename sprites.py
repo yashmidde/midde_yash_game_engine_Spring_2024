@@ -16,6 +16,7 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
         self.y = y * TILESIZE
+        self.moneybag = 0 
     
     def get_keys(self):
         self.vx, self.vy = 0, 0 #resets velocity
@@ -63,10 +64,14 @@ class Player(pg.sprite.Sprite):
                 self.vy = 0
                 self.rect.y = self.y
 
-
+    def collide_with_group(self, group, kill):
+        hits = pg.sprite.spritecollide(self, group, kill)
+        if hits:
+            return True
+    
     def update(self):
         self.get_keys()
-        self.x += self.vx * self.game.dt #delta time; multiplying player position by game clock so game clock will influence position
+        self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
         self.rect.x = self.x
         # add collision later
@@ -74,8 +79,28 @@ class Player(pg.sprite.Sprite):
         self.rect.y = self.y
         # add collision later
         self.collide_with_walls('y')
+        if self.collide_with_group(self.game.coins, True):
+            self.moneybag =+ 1
+        
 
+class Coin(pg.sprite.Sprite):
+    #method to init properties of the class
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.coins
+        #init superclass
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(YELLOW)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        #multiplying by tile size to create wall
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
+    
+    
 class Wall(pg.sprite.Sprite):
     #method to init properties of the class
     def __init__(self, game, x, y):

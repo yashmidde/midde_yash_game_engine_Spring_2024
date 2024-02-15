@@ -42,6 +42,7 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         #places wall in group
         self.walls = pg.sprite.Group()
+        self.coins = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
@@ -54,6 +55,8 @@ class Game:
                     Wall(self, col, row)
                 if tile == 'P':
                     self.player = Player(self, col, row)
+                if tile == '2':
+                    self.player = Coin(self, col, row)
         #self.player1 = Player(self, 1, 1)
         #x and y value for wall
         #for x in range(10, 20):
