@@ -1,12 +1,28 @@
 # This file was created by: Chris Cozort
 #added this comment to prove github is listening
 # import libraries and modules
+
+
+
 import pygame as pg
 from settings import *
 from sprites import *
 from random import randint
 import sys
 from os import path
+
+
+'''
+goals: proceed to new different level by collecting coins
+feedback: coin collection/hitting enemy (lose health) 
+rules: can't hit enemies, can't proeed to new levels without collecting coins
+freedom: movement
+
+ideas:
+moving enemies
+different levels
+health bar
+'''
 
 
 # creating a class called game
