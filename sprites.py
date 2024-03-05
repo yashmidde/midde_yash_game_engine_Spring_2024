@@ -17,6 +17,10 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0 
+        self.speed=300
+        self.lives = 3
+        
+
        
     
     def get_keys(self):
@@ -73,7 +77,9 @@ class Player(pg.sprite.Sprite):
                 self.moneybag += 1
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print("You just got powered up!")
-            
+            if str(hits[0].__class__.__name__) == "Mob":
+                self.lives -= 1
+    
     
     def update(self):
         self.get_keys()
@@ -89,6 +95,9 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.power_ups, True)
         if self.collide_with_group(self.game.coins, True):
             self.moneybag =+ 1
+        if self.collide_with_group(self.game.mobs, True):
+            self.lives =+ 1
+        
         
 
 class Coin(pg.sprite.Sprite):
@@ -158,17 +167,35 @@ class Mob(pg.sprite.Sprite):
         self.speed = 1
     def collide_with_walls(self, dir):
         if dir == 'x':
-            print('colliding on the x')
+            # print('colliding on the x')
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 self.vx *= -1
                 self.rect.x = self.x
         if dir == 'y':
-            print('colliding on the y')
+            # print('colliding on the y')
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
                 self.vy *= -1
                 self.rect.y = self.y
+    def update(self):
+        # self.rect.x += 1
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
+        
+        if self.rect.x < self.game.player.rect.x:
+            self.vx = 100
+        if self.rect.x > self.game.player.rect.x:
+            self.vx = -100    
+        if self.rect.y < self.game.player.rect.y:
+            self.vy = 100
+        if self.rect.y > self.game.player.rect.y:
+            self.vy = -100
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
+        
     def update(self):
         # self.rect.x += 1
         self.x += self.vx * self.game.dt
@@ -187,4 +214,3 @@ class Mob(pg.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('y')
         
-

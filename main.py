@@ -15,12 +15,13 @@ from os import path
 '''
 goals: proceed to new different level by collecting coins
 feedback: coin collection/hitting enemy (lose health) 
-rules: can't hit enemies, can't proeed to new levels without collecting coins
+rules: health bar, can't proeed to new levels without collecting coins
 freedom: movement
 
 ideas:
 moving enemies
-different levels
+shooting enemies
+proceed to new level
 health bar
 '''
 
@@ -65,6 +66,7 @@ class Game:
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
+        self.mobs = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -78,6 +80,8 @@ class Game:
                     self.player = Coin(self, col, row) #2 in map.txt will print a coin
                 if tile == '3':
                     self.player = PowerUp(self, col, row) #2 in map.txt will print a coin
+                if tile == 'M':
+                    self.mob = Mob(self, col, row)
         #self.player1 = Player(self, 1, 1)
         #x and y value for wall
         #for x in range(10, 20):
@@ -99,6 +103,7 @@ class Game:
 
     def update(self):
         self.all_sprites.update() #every single sprite
+
     
     def draw_grid(self):
          for x in range(0, WIDTH, TILESIZE):
@@ -106,6 +111,7 @@ class Game:
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
     
+    #moneybag
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -119,7 +125,10 @@ class Game:
             self.draw_grid()
             self.all_sprites.draw(self.screen)
             self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
+            self.draw_text(self.screen, str(self.player.lives), 64, WHITE, 15, 1)
             pg.display.flip()
+
+
 
     def events(self):
          #event is what human does
@@ -135,7 +144,7 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
-
+    
 # Instantiate the game... 
 g = Game()
 # use game method run to run
