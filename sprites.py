@@ -21,8 +21,6 @@ class Player(pg.sprite.Sprite):
         self.lives = 3
         
 
-       
-    
     def get_keys(self):
         self.vx, self.vy = 0, 0 #resets velocity
         keys = pg.key.get_pressed() 
@@ -79,8 +77,10 @@ class Player(pg.sprite.Sprite):
                 print("You just got powered up!")
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1
-    
-    
+                
+                
+
+
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
@@ -96,7 +96,9 @@ class Player(pg.sprite.Sprite):
         if self.collide_with_group(self.game.coins, True):
             self.moneybag =+ 1
         if self.collide_with_group(self.game.mobs, True):
-            self.lives =+ 1
+            self.lives -= 1
+        if self.lives == 0:
+            print("Death")
         
         
 

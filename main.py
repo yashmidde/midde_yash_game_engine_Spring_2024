@@ -13,15 +13,14 @@ from os import path
 
 
 '''
-goals: proceed to new different level by collecting coins
-feedback: coin collection/hitting enemy (lose health) 
-rules: health bar, can't proeed to new levels without collecting coins
+goals: collecting coins without dying
+feedback: coin collection/colliding enemy (lose health) 
+rules: health bar, can't collide with enemies
 freedom: movement
 
 ideas:
 moving enemies
-shooting enemies
-proceed to new level
+shooting/kill enemies
 health bar
 '''
 
@@ -125,10 +124,8 @@ class Game:
             self.draw_grid()
             self.all_sprites.draw(self.screen)
             self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
-            self.draw_text(self.screen, str(self.player.lives), 64, WHITE, 15, 1)
+            self.draw_text(self.screen, "Lives:" + str(self.player.lives), 64, WHITE, 13, 1)
             pg.display.flip()
-
-
 
     def events(self):
          #event is what human does
@@ -144,6 +141,8 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
+                
+    
     
 # Instantiate the game... 
 g = Game()
