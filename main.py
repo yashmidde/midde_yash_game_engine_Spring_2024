@@ -121,26 +121,14 @@ class Game:
         text_rect.topleft = (x*TILESIZE,y*TILESIZE)
         surface.blit(text_surface, text_rect)
     
-    def draw_healthbar(self):
-        self.draw.rect(self.screen, RED, pg.Rect(100, 100, 200, 200))#3 lives
-        pg.display.flip()
-
-
-        #     pg.display.flip()
-        #     self.draw.rect()#2 lives
-        #     self.draw.rect()
-        # if self.health == (2):
-        #     self.draw.rect()#2 lives
-        #     self.draw.rect()
-        # if self.health == (1):
-        #     self.draw.rect()#1 lives
-
+   
     def draw(self):
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
             self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
             self.draw_text(self.screen, "Lives:" + str(self.player.lives), 64, WHITE, 13, 1)
+            pg.draw.rect(self.screen, RED, pg.Rect(450, 100, 150, 10))
             pg.display.flip()
 
 
