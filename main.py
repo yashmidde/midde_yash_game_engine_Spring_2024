@@ -19,8 +19,8 @@ rules: health bar, can't collide with enemies
 freedom: movement
 
 ideas:
-moving enemies
-shooting/kill enemies
+kill/shoot
+startscreen
 health bar
 '''
 
@@ -38,6 +38,7 @@ class Game:
         self.clock = pg.time.Clock()
         self.load_data()
         #load memory from hardrive
+        
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
@@ -81,6 +82,7 @@ class Game:
                     self.player = PowerUp(self, col, row) #2 in map.txt will print a coin
                 if tile == 'M':
                     self.mob = Mob(self, col, row)
+        
         #self.player1 = Player(self, 1, 1)
         #x and y value for wall
         #for x in range(10, 20):
@@ -118,6 +120,20 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.topleft = (x*TILESIZE,y*TILESIZE)
         surface.blit(text_surface, text_rect)
+    
+    def draw_healthbar(self):
+        self.draw.rect(self.screen, RED, pg.Rect(100, 100, 200, 200))#3 lives
+        pg.display.flip()
+
+
+        #     pg.display.flip()
+        #     self.draw.rect()#2 lives
+        #     self.draw.rect()
+        # if self.health == (2):
+        #     self.draw.rect()#2 lives
+        #     self.draw.rect()
+        # if self.health == (1):
+        #     self.draw.rect()#1 lives
 
     def draw(self):
             self.screen.fill(BGCOLOR)
@@ -126,6 +142,7 @@ class Game:
             self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
             self.draw_text(self.screen, "Lives:" + str(self.player.lives), 64, WHITE, 13, 1)
             pg.display.flip()
+
 
     def events(self):
          #event is what human does
@@ -142,12 +159,31 @@ class Game:
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
                 
+    def show_start_screen(self):
+        self.screen.fill(BGCOLOR)
+        self.draw_text(self.screen, "This is the start screen", 64, WHITE, 1, 1)
+        pg.display.flip()
+        self.wait_for_key()
+
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.quit()
+                if event.type == pg.KEYUP:
+                    waiting = False
+
+
+        
     
     
 # Instantiate the game... 
 g = Game()
 # use game method run to run
-# g.show_start_screen()
+g.show_start_screen()
 while True:
     g.new()
     g.run()
