@@ -25,6 +25,7 @@ health bar
 '''
 
 
+
 # creating a class called game
 class Game:
     # Define a special method to init the properties of said class...
@@ -127,8 +128,14 @@ class Game:
             self.draw_grid()
             self.all_sprites.draw(self.screen)
             self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
-            self.draw_text(self.screen, "Lives:" + str(self.player.lives), 64, WHITE, 13, 1)
-            pg.draw.rect(self.screen, RED, pg.Rect(450, 100, 150, 10))
+            pg.draw.rect(self.screen, RED, pg.Rect(360, 50, 300, 40))
+            if self.player.lives == 3:
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 300, 40))
+            if self.player.lives == 2:
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 200, 40))
+            if self.player.lives == 1:
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 100, 40))
+            
             pg.display.flip()
 
 
