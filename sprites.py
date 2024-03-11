@@ -97,8 +97,7 @@ class Player(pg.sprite.Sprite):
             self.moneybag =+ 1
         if self.collide_with_group(self.game.mobs, True):
             self.lives -= 1
-        if self.lives == 0:
-            print("Death")
+        
         
         
 

@@ -19,8 +19,8 @@ rules: health bar, can't collide with enemies
 freedom: movement
 
 ideas:
-kill/shoot
-startscreen
+projectile
+startscreen/endscreen
 health bar
 '''
 
@@ -132,9 +132,9 @@ class Game:
             if self.player.lives == 3:
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 300, 40))
             if self.player.lives == 2:
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 200, 40))
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 200, 40)) #changes size of healthbar when a life is lost
             if self.player.lives == 1:
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 100, 40))
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 100, 40)) #changes size of healthbar when a life is lost
             
             pg.display.flip()
 
@@ -160,6 +160,7 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
 
+
     def wait_for_key(self):
         waiting = True
         while waiting:
@@ -175,10 +176,11 @@ class Game:
         
     
     
-# Instantiate the game... 
+# Instantiate the game... d
 g = Game()
 # use game method run to run
 g.show_start_screen()
+
 while True:
     g.new()
     g.run()
