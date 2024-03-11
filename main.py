@@ -68,6 +68,7 @@ class Game:
         # for x in range(10, 20):
         #     Wall(self, x, 5)
         self.mobs = pg.sprite.Group()
+        self.pew_pews = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
