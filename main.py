@@ -144,6 +144,9 @@ class Game:
             if self.player.lives <= 0:
                 self.screen.fill(BGCOLOR)
                 self.draw_text(self.screen, str("You died!"), 64, WHITE, 1, 1) #death screen
+            if self.player.vaulthit >= 1 and self.player.moneybag == 5:
+                self.screen.fill(BGCOLOR)
+                self.draw_text(self.screen, str("You won!"), 64, WHITE, 1, 1) #win screen
             pg.display.flip()
 
 

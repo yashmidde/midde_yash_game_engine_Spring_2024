@@ -19,7 +19,7 @@ class Player(pg.sprite.Sprite):
         self.moneybag = 0 
         self.speed=300
         self.lives = 3
-        
+        self.vaulthit = 0        
 
     def get_keys(self):
         self.vx, self.vy = 0, 0 #resets velocity
@@ -84,7 +84,7 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1
             if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 5:
-                print("You won")
+                self.vaulthit += 1
 
                 
     
