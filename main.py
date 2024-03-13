@@ -62,13 +62,14 @@ class Game:
         self.walls = pg.sprite.Group()
         #places coin in group
         self.coins = pg.sprite.Group()
-        #places powerup in coin
+        #places powerup in grouop
         self.power_ups = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
         self.mobs = pg.sprite.Group()
         self.pew_pews = pg.sprite.Group()
+        self.vault = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -84,6 +85,10 @@ class Game:
                     self.player = PowerUp(self, col, row) #2 in map.txt will print a coin
                 if tile == 'M':
                     self.mob = Mob(self, col, row)
+                if tile == '4':
+                    Vault(self, col, row)
+                
+
         
         #self.player1 = Player(self, 1, 1)
         #x and y value for wall
@@ -129,13 +134,13 @@ class Game:
             self.draw_grid()
             self.all_sprites.draw(self.screen)
             self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
-            pg.draw.rect(self.screen, RED, pg.Rect(360, 50, 300, 40))
+            pg.draw.rect(self.screen, RED, pg.Rect(360, 45, 300, 40))
             if self.player.lives == 3:
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 300, 40))
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 300, 40))
             if self.player.lives == 2:
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 200, 40)) #changes size of healthbar when a life is lost
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 200, 40)) #changes size of healthbar when a life is lost
             if self.player.lives == 1:
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 50, 100, 40)) #changes size of healthbar when a life is lost
+                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 100, 40)) #changes size of healthbar when a life is lost
             
             pg.display.flip()
 
@@ -160,6 +165,9 @@ class Game:
         self.draw_text(self.screen, "This is the start screen", 64, WHITE, 1, 1)
         pg.display.flip()
         self.wait_for_key()
+    
+
+
 
 
     def wait_for_key(self):

@@ -83,6 +83,13 @@ class Player(pg.sprite.Sprite):
                 print("You just got powered up!")
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1
+            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 5:
+                print("You won")
+
+                
+    
+
+
                 
                 
 
@@ -99,6 +106,8 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.power_ups, True)
+        if self.collide_with_group(self.game.vault, False):
+            print("You won!")
         if self.collide_with_group(self.game.coins, True):
             self.moneybag =+ 1
         if self.collide_with_group(self.game.mobs, True):
@@ -122,6 +131,23 @@ class Coin(pg.sprite.Sprite):
         #multiplying by tile size to create wall
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+class Vault(pg.sprite.Sprite):
+    #method to init properties of the class
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.vault
+        #init superclass
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(WHITE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        #multiplying by tile size to create wall
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+
 
 class PowerUp(pg.sprite.Sprite):
     #method to init properties of the class
@@ -191,7 +217,7 @@ class Mob(pg.sprite.Sprite): #class for enemies
         self.vx, self.vy = 100, 100
         self.x = x * TILESIZE
         self.y = y * TILESIZE
-        self.speed = 1
+        self.speed = 10
     def collide_with_walls(self, dir): #mob collision with wall
         if dir == 'x':
             # print('colliding on the x')
@@ -205,6 +231,7 @@ class Mob(pg.sprite.Sprite): #class for enemies
             if hits:
                 self.vy *= -1
                 self.rect.y = self.y
+    
     def update(self):
         # self.rect.x += 1
         self.x += self.vx * self.game.dt
@@ -240,6 +267,7 @@ class Mob(pg.sprite.Sprite): #class for enemies
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
-        
+
+
 
 
