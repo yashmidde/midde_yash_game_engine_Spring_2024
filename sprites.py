@@ -268,6 +268,4 @@ class Mob(pg.sprite.Sprite): #class for enemies
         self.rect.y = self.y
         self.collide_with_walls('y')
 
-
-
-
+    

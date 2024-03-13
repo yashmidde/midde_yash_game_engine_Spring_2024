@@ -141,7 +141,9 @@ class Game:
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 200, 40)) #changes size of healthbar when a life is lost
             if self.player.lives == 1:
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 100, 40)) #changes size of healthbar when a life is lost
-            
+            if self.player.lives <= 0:
+                self.screen.fill(BGCOLOR)
+                self.draw_text(self.screen, str("You died!"), 64, WHITE, 1, 1) #death screen
             pg.display.flip()
 
 
@@ -166,8 +168,7 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
     
-
-
+    
 
 
     def wait_for_key(self):
@@ -189,6 +190,7 @@ class Game:
 g = Game()
 # use game method run to run
 g.show_start_screen()
+
 
 while True:
     g.new()
