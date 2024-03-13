@@ -13,15 +13,16 @@ from os import path
 
 
 '''
-goals: collecting coins without dying
+goals: collecting coins without dying, reach vault
 feedback: coin collection/colliding enemy (lose health) 
 rules: health bar, can't collide with enemies
 freedom: movement
 
 ideas:
-projectile
-startscreen/endscreen
-health bar
+projectile (finished)
+startscreen/endscreen (finished, add more detail to screen)
+health bar (finished)
+vault (after collecting all the coins, the player has to reach vault to win game)
 '''
 
 
