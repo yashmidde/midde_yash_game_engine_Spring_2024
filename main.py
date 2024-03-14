@@ -134,7 +134,7 @@ class Game:
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
-            self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
+            self.draw_text(self.screen, str(self.player.moneybag), 50, YELLOW, 1.5, 1.25)
             pg.draw.rect(self.screen, RED, pg.Rect(360, 45, 300, 40))
             if self.player.lives == 3:
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 300, 40))
@@ -144,10 +144,10 @@ class Game:
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 100, 40)) #changes size of healthbar when a life is lost
             if self.player.lives <= 0:
                 self.screen.fill(BGCOLOR)
-                self.draw_text(self.screen, str("You died!"), 64, WHITE, 1, 1) #death screen
-            if self.player.vaulthit >= 1 and self.player.moneybag == 5:
+                self.draw_text(self.screen, str("You DIED!"), 100, WHITE, 10, 9.5) #death screen
+            if self.player.vaulthit >= 1 and self.player.moneybag == 10:
                 self.screen.fill(BGCOLOR)
-                self.draw_text(self.screen, str("You won!"), 64, WHITE, 1, 1) #win screen
+                self.draw_text(self.screen, str("You WON!"), 100, WHITE, 10, 9.5) #win screen
             pg.display.flip()
 
 
@@ -168,7 +168,12 @@ class Game:
                 
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
-        self.draw_text(self.screen, "This is the start screen", 64, WHITE, 1, 1)
+        self.draw_text(self.screen, "PRESS ANY KEY TO BEGIN!", 64, WHITE, 4, 5)
+        self.draw_text(self.screen, "Collect all 10 coins and return them to the vault to win!", 32, WHITE, 4, 8)
+        self.draw_text(self.screen, "Use projectiles (E) to protect yourself from your enemies,", 32, WHITE, 4, 10)
+        self.draw_text(self.screen, "but make sure your projectiles don't destroy any coins!", 32, WHITE, 4, 11)
+        self.draw_text(self.screen, "Powerups are placed around the map that give you a speedboost.", 32, WHITE, 4, 13)
+
         pg.display.flip()
         self.wait_for_key()
     

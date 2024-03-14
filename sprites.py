@@ -33,7 +33,6 @@ class Player(pg.sprite.Sprite):
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = PLAYER_SPEED
         if keys[pg.K_e]:
-            print("trying to shoot...")
             self.pew()
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
@@ -83,7 +82,7 @@ class Player(pg.sprite.Sprite):
                 print("You just got powered up!")
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1
-            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 5:
+            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 10:
                 self.vaulthit += 1
 
                 
@@ -179,7 +178,6 @@ class PewPew(pg.sprite.Sprite): #class for projectiles
         self.rect.x = x
         self.rect.y = y
         self.speed = 10
-        print("I created a pew pew...")
     def collide_with_group(self, group, kill):#made possible by Aayush's question
         hits = pg.sprite.spritecollide(self, group, kill)
                 
