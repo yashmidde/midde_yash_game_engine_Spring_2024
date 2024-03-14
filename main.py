@@ -42,14 +42,19 @@ class Game:
         #load memory from hardrive
         
     def load_data(self):
-        game_folder = path.dirname(__file__)
+        self.game_folder = path.dirname(__file__)
+        self.img_folder = path.join(self.game_folder, 'images')
+
+        self.coin_img = pg.image.load(path.join(self.img_folder, 'coin.png')).convert_alpha()
+        self.powerup_img = pg.image.load(path.join(self.img_folder, 'powerup.png')).convert_alpha()
+        self.wall_img = pg.image.load(path.join(self.img_folder, 'wall.png')).convert_alpha()
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
         after it is used. This can help to prevent errors and leaks.
         '''
-        with open(path.join(game_folder, 'map.txt'), 'rt') as f: #connecting map.txt to main code, printing map
+        with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #connecting map.txt to main code, printing map
             for line in f:
                 print(line) 
                 self.map_data.append(line)
