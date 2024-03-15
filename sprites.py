@@ -82,11 +82,13 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1 #adds value to moneybag when colliding with coin
             if str(hits[0].__class__.__name__) == "PowerUp":
-                print("You just got powered up!")
+                self.vaulthit += 1
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1 #subtracts life when collding with mob
             if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 10:
                 self.vaulthit += 1 
+            if str(hits[0].__class__.__name__) == "HealthRegen" and self.lives <= 3:
+                self.lives += 1
 
     
     def update(self):
@@ -107,6 +109,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
             self.moneybag =+ 1
         if self.collide_with_group(self.game.mobs, True):
             self.lives -= 1
+        self.collide_with_group(self.game.health_regen, True)
         
         
 class Coin(pg.sprite.Sprite):
@@ -240,22 +243,20 @@ class Mob(pg.sprite.Sprite): #class for enemies
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
+
+class HealthRegen(pg.sprite.Sprite):
+    #method to init properties of the class
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.health_regen #tuple
+        #init superclass
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image = game.heart_img
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        #multiplying by tile size to create wall
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
         
-    def update(self):
-        # self.rect.x += 1
-        self.x += self.vx * self.game.dt
-        self.y += self.vy * self.game.dt
-
-        if self.rect.x < self.game.player.rect.x:
-            self.vx = 100
-        if self.rect.x > self.game.player.rect.x:
-            self.vx = -100    
-        if self.rect.y < self.game.player.rect.y:
-            self.vy = 100
-        if self.rect.y > self.game.player.rect.y:
-            self.vy = -100
-        self.rect.x = self.x
-        self.collide_with_walls('x')
-        self.rect.y = self.y
-        self.collide_with_walls('y')
-

@@ -50,6 +50,7 @@ class Game:
         self.player_img = pg.image.load(path.join(self.img_folder, 'Wizard.png')).convert_alpha()
         self.mob_img = pg.image.load(path.join(self.img_folder, 'mob.png')).convert_alpha()
         self.vault_img = pg.image.load(path.join(self.img_folder, 'chest.png')).convert_alpha()
+        self.heart_img = pg.image.load(path.join(self.img_folder, 'heart.png')).convert_alpha()
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
@@ -68,6 +69,7 @@ class Game:
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
         self.power_ups = pg.sprite.Group()
+        self.health_regen = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.pew_pews = pg.sprite.Group()
         self.vault = pg.sprite.Group()
@@ -87,6 +89,8 @@ class Game:
                     self.mob = Mob(self, col, row) #M in map.txt will print a mob
                 if tile == '4':
                     Vault(self, col, row) #4 in map.txt will print a vault
+                if tile == 'H':
+                    HealthRegen(self, col, row) #H in map.txt will print a vault
 
 
     #method which runs the whole game
@@ -125,6 +129,7 @@ class Game:
     
    
     def draw(self):
+            keys = pg.key.get_pressed()
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
@@ -134,7 +139,7 @@ class Game:
 
             #healthbar
             pg.draw.rect(self.screen, RED, pg.Rect(360, 45, 300, 40))
-            if self.player.lives == 3: #start
+            if self.player.lives >= 3: #start
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 300, 40))
             if self.player.lives == 2: #size changes when life is lost
                 pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 200, 40)) 
@@ -222,6 +227,9 @@ class Game:
                         self.player = PowerUp(self, col, row)
                     if tile == '4':
                         Vault(self, col, row)
+
+        
+
         
 # Instantiate the game... d
 g = Game()
