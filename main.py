@@ -106,19 +106,21 @@ class Game:
 
     #method which runs the whole game
     def run(self):
-        # 
+        keys = pg.key.get_pressed() 
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()#input
             self.update()#process
             self.draw()#output
+
     def quit(self):
          #closes window in Windows
          pg.quit()
          sys.exit()
 
     def update(self):
+        self.restart()
         self.all_sprites.update() #every single sprite
 
     
@@ -196,9 +198,44 @@ class Game:
                 if event.type == pg.KEYUP:
                     waiting = False
 
-
+    def restart(self):
+        keys = pg.key.get_pressed()
+        if keys[pg.K_r]:
+            for s in self.all_sprites:
+                s.kill()
+            # reset criteria for changing level
+            self.player.moneybag = 0
+            # reset map data list to empty
+            self.map_data = []
+            # open next level
+            self.player.lives = 3
+            with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #connecting map.txt to main code, printing map
+                for line in f:
+                    print(line) 
+                    self.map_data.append(line)
+            # repopulate the level with stuff
+            for row, tiles in enumerate(self.map_data):
+                print(row)
+                for col, tile in enumerate(tiles):
+                    print(col)
+                    if tile == '1':
+                        print("a wall at", row, col)
+                        Wall(self, col, row)
+                    if tile == 'P':
+                        self.player = Player(self, col, row)
+                    if tile == '2':
+                        self.player = Coin(self, col, row)
+                    if tile == 'M':
+                        self.mob = Mob(self, col, row)
+                    if tile == '3':
+                        self.player = PowerUp(self, col, row)
+                    if tile == '4':
+                        Vault(self, col, row)
         
+        
+
     
+
     
 # Instantiate the game... d
 g = Game()
