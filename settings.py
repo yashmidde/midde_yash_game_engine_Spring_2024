@@ -15,14 +15,14 @@ TITLE = "Tilemap Demo"
 
  
 
-BGCOLOR = (0, 0, 0)
+BGCOLOR = (19, 18, 38)
 GREEN = (0, 255, 0)
-BLUE = (0, 0, 255)
+BLUE = (120, 230, 255)
 LIGHTGREY = (75, 75, 75)
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 RED = (136, 8, 8)
-YELLOW = (196, 180, 84)
+YELLOW = (255, 180, 18)
 ORANGE = (255, 165, 0)
 
 #player settings
