@@ -48,6 +48,9 @@ class Game:
         self.coin_img = pg.image.load(path.join(self.img_folder, 'coin.png')).convert_alpha()
         self.powerup_img = pg.image.load(path.join(self.img_folder, 'powerup.png')).convert_alpha()
         self.wall_img = pg.image.load(path.join(self.img_folder, 'wall.png')).convert_alpha()
+        self.player_img = pg.image.load(path.join(self.img_folder, 'Wizard.png')).convert_alpha()
+        self.mob_img = pg.image.load(path.join(self.img_folder, 'mob.png')).convert_alpha()
+        self.vault_img = pg.image.load(path.join(self.img_folder, 'chest.png')).convert_alpha()
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
@@ -182,9 +185,6 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
     
-    
-
-
     def wait_for_key(self):
         waiting = True
         while waiting:

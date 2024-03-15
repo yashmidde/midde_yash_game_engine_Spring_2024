@@ -11,7 +11,7 @@ class Player(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(GREEN)
+        self.image = game.player_img
         self.rect = self.image.get_rect()
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
@@ -138,7 +138,7 @@ class Vault(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(WHITE)
+        self.image = game.vault_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -207,7 +207,7 @@ class Mob(pg.sprite.Sprite): #class for enemies
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(RED)
+        self.image = game.mob_img
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -265,4 +265,3 @@ class Mob(pg.sprite.Sprite): #class for enemies
         self.rect.y = self.y
         self.collide_with_walls('y')
 
-    
