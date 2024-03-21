@@ -22,6 +22,11 @@ projectile
 startscreen/death screen/end screen (with restart button)
 health bar
 vault (after collecting all the coins, the player has to reach vault to win game)
+spawning mobs
+new levels
+loot boxes
+pickaxe to destroy walls
+moving camera
 '''
 
 
@@ -227,6 +232,8 @@ class Game:
                         self.player = PowerUp(self, col, row)
                     if tile == '4':
                         Vault(self, col, row)
+                    if tile == 'H':
+                        HealthRegen(self, col, row) #H in map.txt will print a vault
 
         
 

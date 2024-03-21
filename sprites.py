@@ -82,7 +82,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1 #adds value to moneybag when colliding with coin
             if str(hits[0].__class__.__name__) == "PowerUp":
-                self.vaulthit += 1
+                print("You just got powered up")
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1 #subtracts life when collding with mob
             if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 10:
