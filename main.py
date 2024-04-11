@@ -22,11 +22,21 @@ projectile
 startscreen/death screen/end screen (with restart button)
 health bar
 vault (after collecting all the coins, the player has to reach vault to win game)
+--------------------------------------------------------------------------------------------
 spawning mobs
 new levels
 loot boxes
 pickaxe to destroy walls
 moving camera
+environment hazards (fire = kills you, water = slows you down, trees = hides you from mobs)
+
+
+5 things fun:
+Collecting all the coins and getting back to the vault
+Trying to avoid mobs and not die
+Shooting mobs with projectiles
+Colllecting all the power ups/health regen
+The map/sprites
 '''
 
 
@@ -56,6 +66,7 @@ class Game:
         self.mob_img = pg.image.load(path.join(self.img_folder, 'mob.png')).convert_alpha()
         self.vault_img = pg.image.load(path.join(self.img_folder, 'chest.png')).convert_alpha()
         self.heart_img = pg.image.load(path.join(self.img_folder, 'heart.png')).convert_alpha()
+        self.bell_img = pg.image.load(path.join(self.img_folder, 'theBell.png')).convert_alpha()
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
