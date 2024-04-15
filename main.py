@@ -23,12 +23,7 @@ startscreen/death screen/end screen (with restart button)
 health bar
 vault (after collecting all the coins, the player has to reach vault to win game)
 --------------------------------------------------------------------------------------------
-spawning mobs
-new levels
-loot boxes
-pickaxe to destroy walls
-moving camera
-environment hazards (fire = kills you, water = slows you down, trees = hides you from mobs)
+
 
 
 5 things fun:
@@ -37,6 +32,21 @@ Trying to avoid mobs and not die
 Shooting mobs with projectiles
 Colllecting all the power ups/health regen
 The map/sprites
+
+
+
+Ideas:
+
+- Moving camera up, obstacles/mobs get progressively harder with final boss mob at the end 
+    -adds fun because it creates an element of progress and progressing difficulty for the player
+- a way to 'spend' your coins 
+    - adds fun because it offers a reward for the player that they can continue over time and actually use
+    - ex: extra armor, different tools, different skins
+- loot chests
+    - adds fun because it adds an element of surprise
+    - "loadout" with differen tools (pickaxe, grenade, etc.)
+- environment hazards (fire, water, trees)
+    - adds fun because it creates a realistic element and also offers more unique gameplay experiences
 '''
 
 
