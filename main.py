@@ -186,6 +186,9 @@ class Game:
             pg.display.flip()
 
 
+    def camera(self):
+        camera_offset_x = 0
+        
     def events(self): #events are what human does
          for event in pg.event.get():
             if event.type == pg.QUIT: #quitting window
