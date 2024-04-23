@@ -47,6 +47,13 @@ Ideas:
     - "loadout" with differen tools (pickaxe, grenade, etc.)
 - environment hazards (fire, water, trees)
     - adds fun because it creates a realistic element and also offers more unique gameplay experiences
+
+
+release version
+- a way to 'spend' your coins 
+    - adds fun because it offers a reward for the player that they can continue over time and actually use
+    - ex: extra armor, different tools, different skins
+    - game should be continuous; player should be able to "pause" and go to an item shop to purchase 
 '''
 
 
@@ -128,6 +135,7 @@ class Game:
             self.update()#process
             self.draw()#output
 
+
     def quit(self): #closes window in Windows
          pg.quit()
          sys.exit()
@@ -186,8 +194,6 @@ class Game:
             pg.display.flip()
 
 
-    def camera(self):
-        camera_offset_x = 0
         
     def events(self): #events are what human does
          for event in pg.event.get():
@@ -259,9 +265,7 @@ class Game:
                     if tile == 'H':
                         HealthRegen(self, col, row) #H in map.txt will print a vault
 
-        
 
-        
 # Instantiate the game... d
 g = Game()
 # use game method run to run
