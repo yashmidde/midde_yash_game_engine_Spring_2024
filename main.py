@@ -95,7 +95,7 @@ class Game:
         # Display items and prices
         y_offset = 8
         for item, price in self.shop_items.items():
-            self.draw_text(self.screen, f"{item}: {price} coins", 32, WHITE, 4, y_offset)
+            self.draw_text(self.screen, f"{item}: {price} coins (press B/M/N twice to purchase)", 32, WHITE, 4, y_offset)
             y_offset += 2
 
         # Show player's current currency
@@ -107,8 +107,11 @@ class Game:
     def buy_armor(self):
         if self.player.moneybag >= 3:
             print("You just bought armor")
+            self.draw_text(self.screen, f"New Balance: {self.player.moneybag - 3}", 32, WHITE, 25, 20)
             self.player.moneybag -= 3
             self.player.lives += 3
+            
+        
 
             
             #if item == "Armor":
@@ -252,7 +255,7 @@ class Game:
                     self.pass_function()
                 if event.key == pg.K_o:  # Show item shop when 's' key is pressed
                     self.show_item_shop()
-                elif event.key == pg.K_m:  # Example: Buy an item when 'b' key is pressed
+                elif event.key == pg.K_b:  # Example: Buy an item when 'b' key is pressed
                     self.buy_armor()  # Change "Armor" to the selected item
             # Other event handling code...
             if event.type == pg.QUIT: #quitting window
