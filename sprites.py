@@ -2,7 +2,6 @@
 # This code was informed by Chris Bradfield
 
 import pygame as pg
-from main import *
 from settings import *
 from pygame.sprite import Sprite
 from os import path

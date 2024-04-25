@@ -70,7 +70,53 @@ class Game:
         # setting game clock 
         self.clock = pg.time.Clock()
         self.load_data()
+        self.paused = False
         #load memory from hardrive
+         # Initialization code...
+
+        # Define the items available in the shop with their prices
+        self.shop_items = {
+            "Armor": 3,
+            "Sword": 5,
+            "Potion": 10
+        }
+
+        self.armorprice = 3
+
+        # Initialize player's currency
+        self.moneybag = 0
+
+    def show_item_shop(self):           
+        # Display the item shop on the screen
+        self.paused = True
+        self.screen.fill(BGCOLOR)
+        self.draw_text(self.screen, "Item Shop", 64, WHITE, 4, 5)
+        
+        # Display items and prices
+        y_offset = 8
+        for item, price in self.shop_items.items():
+            self.draw_text(self.screen, f"{item}: {price} coins", 32, WHITE, 4, y_offset)
+            y_offset += 2
+
+        # Show player's current currency
+        self.draw_text(self.screen, f"Your Coins: {self.player.moneybag}", 32, WHITE, 4, y_offset + 2)
+
+        pg.display.flip()
+        self.wait_for_key()
+
+    def buy_armor(self):
+        if self.player.moneybag >= 3:
+            print("You just bought armor")
+            self.player.moneybag -= 3
+            self.player.lives += 3
+
+            
+            #if item == "Armor":
+                #self.moneybag -= 3
+        pg.display.flip()
+        self.wait_for_key()
+
+
         
     def load_data(self):
         self.game_folder = path.dirname(__file__)
@@ -132,8 +178,9 @@ class Game:
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()#input
-            self.update()#process
-            self.draw()#output
+            if not self.paused:
+                self.update()#process
+                self.draw()#output
 
 
     def quit(self): #closes window in Windows
@@ -163,42 +210,54 @@ class Game:
     
    
     def draw(self):
-            keys = pg.key.get_pressed()
-            self.screen.fill(BGCOLOR)
-            self.draw_grid()
-            self.all_sprites.draw(self.screen)
-
-            # "moneybag" indicator at top of screen, coin counter
-            self.draw_text(self.screen, str(self.player.moneybag), 50, YELLOW, 1.5, 1.25)
-
-            #healthbar
-            pg.draw.rect(self.screen, RED, pg.Rect(360, 45, 300, 40))
-            if self.player.lives >= 3: #start
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 300, 40))
-            if self.player.lives == 2: #size changes when life is lost
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 200, 40)) 
-            if self.player.lives == 1: #size changes when life is lost
-                pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 100, 40)) 
-            if self.player.lives <= 0: 
-                #death screen
+            if self.paused:
+                self.draw_text(self.screen, "Paused", 64, WHITE, WIDTH / 2, HEIGHT / 2)
+            else:
+                keys = pg.key.get_pressed()
                 self.screen.fill(BGCOLOR)
-                self.draw_text(self.screen, str("You DIED!"), 100, WHITE, 10, 9.5) 
-                self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
+                self.draw_grid()
+                self.all_sprites.draw(self.screen)
 
-            
-            if self.player.vaulthit >= 1 and self.player.moneybag == 10: #vaulthit is variable used when player reaches vault
-                #win screen
-                self.screen.fill(BGCOLOR)
-                self.draw_text(self.screen, str("You WON!"), 100, WHITE, 10, 9.5) #win screen
-                self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
-            pg.display.flip()
+                # "moneybag" indicator at top of screen, coin counter
+                self.draw_text(self.screen, str(self.player.moneybag), 50, YELLOW, 1.5, 1.25)
+
+                #healthbar
+                pg.draw.rect(self.screen, RED, pg.Rect(360, 45, 300, 40))
+                if self.player.lives >= 3: #start
+                    pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 300, 40))
+                if self.player.lives == 2: #size changes when life is lost
+                    pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 200, 40)) 
+                if self.player.lives == 1: #size changes when life is lost
+                    pg.draw.rect(self.screen, GREEN, pg.Rect(360, 45, 100, 40)) 
+                if self.player.lives <= 0: 
+                    #death screen
+                    self.screen.fill(BGCOLOR)
+                    self.draw_text(self.screen, str("You DIED!"), 100, WHITE, 10, 9.5) 
+                    self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
+
+                
+                if self.player.vaulthit >= 1 and self.player.moneybag == 10: #vaulthit is variable used when player reaches vault
+                    #win screen
+                    self.screen.fill(BGCOLOR)
+                    self.draw_text(self.screen, str("You WON!"), 100, WHITE, 10, 9.5) #win screen
+                    self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
+                pg.display.flip()
 
 
         
     def events(self): #events are what human does
          for event in pg.event.get():
+            if event.type == pg.KEYUP:
+                if event.key == pg.K_p:  # Call pass function when 'P' key is pressed
+                    self.pass_function()
+                if event.key == pg.K_o:  # Show item shop when 's' key is pressed
+                    self.show_item_shop()
+                elif event.key == pg.K_m:  # Example: Buy an item when 'b' key is pressed
+                    self.buy_armor()  # Change "Armor" to the selected item
+            # Other event handling code...
             if event.type == pg.QUIT: #quitting window
                 self.quit()
+        
             # if event.type == pg.KEYDOWN:
             #     if event.key == pg.K_LEFT:
             #         self.player.move(dx=-1)
@@ -264,6 +323,26 @@ class Game:
                         Vault(self, col, row)
                     if tile == 'H':
                         HealthRegen(self, col, row) #H in map.txt will print a vault
+    def pass_function(self):
+        # Pause or unpause the game when 'P' key is pressed
+        self.paused = not self.paused
+
+# Instantiate the game...
+g = Game()
+g.show_start_screen()
+
+while True:
+    g.new()
+    g.run()
+
+
+# Instantiate the game...
+g = Game()
+g.show_start_screen()
+
+while True:
+    g.new()
+    g.run()
 
 
 # Instantiate the game... d
