@@ -76,9 +76,9 @@ class Game:
 
         # Define the items available in the shop with their prices
         self.shop_items = {
-            "Armor": 3,
-            "Sword": 5,
-            "Potion": 10
+            "Armor (B)": 3,
+            "Sword (M)": 5,
+            "Potion (N)": 10
         }
 
         self.armorprice = 3
@@ -95,7 +95,7 @@ class Game:
         # Display items and prices
         y_offset = 8
         for item, price in self.shop_items.items():
-            self.draw_text(self.screen, f"{item}: {price} coins (press B/M/N twice to purchase)", 32, WHITE, 4, y_offset)
+            self.draw_text(self.screen, f"{item}: {price} coins (press twice to purchase)", 32, WHITE, 4, y_offset)
             y_offset += 2
 
         # Show player's current currency
