@@ -49,6 +49,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
         self.speed = 300
         self.lives = 3
         self.vaulthit = 0   
+        self.wand = 0
 
     def load_images(self):
         self.standing_frames = [self.spritesheet.get_image(0, 0, 32, 32),
@@ -76,7 +77,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
             self.vy = -PLAYER_SPEED  #negative y velocity shifts direction up
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = PLAYER_SPEED    #positive y velocity shifts direction down
-        if keys[pg.K_e]:
+        if keys[pg.K_e] and self.wand >= 1:
             self.pew() #press e to shoot projectiles
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071 #velocity of player
@@ -127,7 +128,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
                 print("You just got powered up")
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1 #subtracts life when collding with mob
-            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 10:
+            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 50:
                 self.vaulthit += 1 
             if str(hits[0].__class__.__name__) == "HealthRegen" and self.lives <= 3:
                 self.lives += 1

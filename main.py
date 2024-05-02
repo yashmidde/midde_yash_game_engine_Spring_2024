@@ -77,7 +77,7 @@ class Game:
         # Define the items available in the shop with their prices. Credit to AI
         self.shop_items = {
             "Armor (B)": 3,
-            "Sword (M)": 5,
+            "Wand (M)": 5,
             "Potion (N)": 10
         }
 
@@ -85,6 +85,7 @@ class Game:
 
         # Initialize player's currency
         self.moneybag = 0
+
 
     def show_item_shop(self): #Credit to AI          
         # Display the item shop on the screen
@@ -113,12 +114,25 @@ class Game:
             self.draw_text(self.screen, f"New Balance: {self.player.moneybag - 3}", 32, WHITE, 25, 20)
             self.player.moneybag -= 3
             self.player.lives += 3
+
+
             
         
 
             
             #if item == "Armor":
                 #self.moneybag -= 3
+        pg.display.flip()
+        self.wait_for_key()
+    
+    def buy_wand(self):
+        if self.player.moneybag >= 5:
+            self.player.wand += 1
+            print("You just bought a wand")
+            self.draw_text(self.screen, f"New Balance: {self.player.moneybag - 5}", 32, WHITE, 25, 20)
+            self.player.moneybag -= 5
+            
+            
         pg.display.flip()
         self.wait_for_key()
 
@@ -261,6 +275,9 @@ class Game:
                     self.show_item_shop()
                 elif event.key == pg.K_b:  # Example: Buy an item when 'b' key is pressed
                     self.buy_armor()  # Change "Armor" to the selected item
+                elif event.key == pg.K_m:
+                    self.buy_wand()
+        
             # Other event handling code...
             if event.type == pg.QUIT: #quitting window
                 self.quit()
@@ -278,9 +295,9 @@ class Game:
     def show_start_screen(self): #start screen, shows how to play
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "PRESS ANY KEY TO BEGIN!", 64, WHITE, 4, 5)
-        self.draw_text(self.screen, "Collect all 10 coins and return them to the vault to win!", 32, WHITE, 4, 8)
-        self.draw_text(self.screen, "Use projectiles (E) to protect yourself from your enemies,", 32, WHITE, 4, 10)
-        self.draw_text(self.screen, "but make sure your projectiles don't destroy any coins!", 32, WHITE, 4, 11)
+        self.draw_text(self.screen, "Collect 50 coins over every wave and return them to the vault to win!", 32, WHITE, 4, 8)
+        self.draw_text(self.screen, "Use your wand (E) to protect yourself from your enemies", 32, WHITE, 4, 10)
+        self.draw_text(self.screen, "after buying it from the item shop! (O)", 32, WHITE, 4, 11)
         self.draw_text(self.screen, "Powerups are placed around the map that give you a speedboost.", 32, WHITE, 4, 13)
         self.draw_text(self.screen, "Press R at any time to restart and P to pause", 32, WHITE, 4, 15)
         
