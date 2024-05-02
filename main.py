@@ -74,7 +74,7 @@ class Game:
         #load memory from hardrive
          # Initialization code...
 
-        # Define the items available in the shop with their prices
+        # Define the items available in the shop with their prices. Credit to AI
         self.shop_items = {
             "Armor (B)": 3,
             "Sword (M)": 5,
@@ -86,11 +86,13 @@ class Game:
         # Initialize player's currency
         self.moneybag = 0
 
-    def show_item_shop(self):           
+    def show_item_shop(self): #Credit to AI          
         # Display the item shop on the screen
         self.paused = True
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "Item Shop", 64, WHITE, 4, 5)
+        self.draw_text(self.screen, "press p to return to game", 32, WHITE, 12, 6)
+
         
         # Display items and prices
         y_offset = 8
@@ -104,6 +106,7 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
 
+    #Allows player to buy item if they have enough coins
     def buy_armor(self):
         if self.player.moneybag >= 3:
             print("You just bought armor")
@@ -253,6 +256,7 @@ class Game:
             if event.type == pg.KEYUP:
                 if event.key == pg.K_p:  # Call pass function when 'P' key is pressed
                     self.pass_function()
+                    self.draw_text(self.screen, "Paused", 32, WHITE, 4, 8)
                 if event.key == pg.K_o:  # Show item shop when 's' key is pressed
                     self.show_item_shop()
                 elif event.key == pg.K_b:  # Example: Buy an item when 'b' key is pressed
@@ -278,11 +282,13 @@ class Game:
         self.draw_text(self.screen, "Use projectiles (E) to protect yourself from your enemies,", 32, WHITE, 4, 10)
         self.draw_text(self.screen, "but make sure your projectiles don't destroy any coins!", 32, WHITE, 4, 11)
         self.draw_text(self.screen, "Powerups are placed around the map that give you a speedboost.", 32, WHITE, 4, 13)
-        self.draw_text(self.screen, "Press R at any time to restart", 32, WHITE, 4, 15)
+        self.draw_text(self.screen, "Press R at any time to restart and P to pause", 32, WHITE, 4, 15)
         
         pg.display.flip()
         self.wait_for_key()
     
+    
+
     def wait_for_key(self): #function so that game starts when player hits any key
         waiting = True
         while waiting:
