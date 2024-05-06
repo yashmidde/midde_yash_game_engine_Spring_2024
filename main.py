@@ -8,6 +8,7 @@ from settings import *
 from sprites import *
 from random import randint
 import sys
+import time
 from os import path
 
 
@@ -85,6 +86,13 @@ class Game:
 
         # Initialize player's currency
         self.moneybag = 0
+        self.wave_timer = 0
+        self.wave_interval = 10000  # 10 seconds in milliseconds
+        self.wave_count = 0
+
+
+    
+
 
 
     def show_item_shop(self): #Credit to AI          
@@ -115,7 +123,6 @@ class Game:
             self.player.moneybag -= 3
             self.player.lives += 3
 
-
             
         
 
@@ -137,6 +144,16 @@ class Game:
         self.wait_for_key()
 
 
+    def buy_potion(self):
+        if self.player.moneybag >= 10:
+            self.player.potion += 1
+            print("You just bought a potion")
+            self.draw_text(self.screen, f"New Balance: {self.player.moneybag - 5}", 32, WHITE, 25, 20)
+            self.player.moneybag -= 5
+            
+            
+        pg.display.flip()
+        self.wait_for_key()
         
     def load_data(self):
         self.game_folder = path.dirname(__file__)
@@ -195,12 +212,26 @@ class Game:
     #method which runs the whole game
     def run(self): 
         self.playing = True
+        respawn_timer = 0
+        respawn_interval = 10000
+
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()#input
+
             if not self.paused:
                 self.update()#process
                 self.draw()#output
+
+                respawn_timer += self.dt * 1000
+                self.wave_timer += self.dt * 1000
+
+
+                if respawn_timer >= respawn_interval:
+                    self.respawn_map()  # Respawn the map
+                    respawn_timer = 0 
+                
+
 
 
     def quit(self): #closes window in Windows
@@ -210,6 +241,7 @@ class Game:
     def update(self): 
         self.restart() #restarts game
         self.all_sprites.update() #updates every single sprite
+        
 
     
     def draw_grid(self): #gridlines for game
@@ -261,6 +293,10 @@ class Game:
                     self.screen.fill(BGCOLOR)
                     self.draw_text(self.screen, str("You WON!"), 100, WHITE, 10, 9.5) #win screen
                     self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
+
+                #time_remaining = max(0, int((self.wave_interval - self.wave_timer / 1000)))
+                #self.draw_text(self.screen, str(time_remaining / 1000), 50, YELLOW, 27, 1.25)
+
                 pg.display.flip()
 
 
@@ -353,6 +389,41 @@ class Game:
         # Pause or unpause the game when 'P' key is pressed
         self.paused = not self.paused
 
+    def respawn_map(self):
+        for sprite in self.all_sprites:
+            sprite.kill() # Remove all existing sprites
+        
+        self.map_data = []
+        
+
+        
+        self.load_data()
+        with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #recreating map
+            for line in f:
+                print(line) 
+                self.map_data.append(line)
+            # repopulate the level with stuff
+            for row, tiles in enumerate(self.map_data):
+                print(row)
+                for col, tile in enumerate(tiles):
+                    print(col)
+                    if tile == '1':
+                        print("a wall at", row, col)
+                        Wall(self, col, row)
+                    if tile == 'P':
+                        self.player = Player(self, col, row)
+                    if tile == '2':
+                        self.player = Coin(self, col, row)
+                    if tile == 'M':
+                        self.mob = Mob(self, col, row)
+                    if tile == '3':
+                        self.player = PowerUp(self, col, row)
+                    if tile == '4':
+                        Vault(self, col, row)
+                    if tile == 'H':
+                        HealthRegen(self, col, row) #H in map.txt will print a vault
+
+    
 # Instantiate the game...
 g = Game()
 g.show_start_screen()

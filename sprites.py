@@ -50,6 +50,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
         self.lives = 3
         self.vaulthit = 0   
         self.wand = 0
+        self.potion = 0
 
     def load_images(self):
         self.standing_frames = [self.spritesheet.get_image(0, 0, 32, 32),
@@ -82,6 +83,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071 #velocity of player
             self.vy *= 0.7071
+        
     def pew(self):
         p = PewPew(self.game, self.rect.x, self.rect.y)
         print(p.rect.x)
