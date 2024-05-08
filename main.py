@@ -168,6 +168,7 @@ class Game:
         self.heart_img = pg.image.load(path.join(self.img_folder, 'heart.png')).convert_alpha()
         self.bell_img = pg.image.load(path.join(self.img_folder, 'theBell.png')).convert_alpha()
         self.map_data = []
+        self.map2_data = []
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
@@ -177,6 +178,10 @@ class Game:
             for line in f:
                 print(line) 
                 self.map_data.append(line)
+        with open(path.join(self.game_folder, 'map2.txt'), 'rt') as f: #connecting map2.txt to main code, printing map
+            for line in f:
+                print(line) 
+                self.map2_data.append(line)
 
     # Create run method which runs the whole game
     def new(self):
@@ -294,8 +299,10 @@ class Game:
                     self.draw_text(self.screen, str("You WON!"), 100, WHITE, 10, 9.5) #win screen
                     self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
 
-                #time_remaining = max(0, int((self.wave_interval - self.wave_timer / 1000)))
-                #self.draw_text(self.screen, str(time_remaining / 1000), 50, YELLOW, 27, 1.25)
+                time_remaining = max(0, int((self.wave_interval - self.wave_timer)))
+                self.draw_text(self.screen, str(time_remaining / 1000 ), 50, YELLOW, 27, 1.25)
+                
+                    
 
                 pg.display.flip()
 
@@ -307,7 +314,7 @@ class Game:
                 if event.key == pg.K_p:  # Call pass function when 'P' key is pressed
                     self.pass_function()
                     self.draw_text(self.screen, "Paused", 32, WHITE, 4, 8)
-                if event.key == pg.K_o:  # Show item shop when 's' key is pressed
+                if event.key == pg.K_i:  # Show item shop when 's' key is pressed
                     self.show_item_shop()
                 elif event.key == pg.K_b:  # Example: Buy an item when 'b' key is pressed
                     self.buy_armor()  # Change "Armor" to the selected item
@@ -361,6 +368,10 @@ class Game:
             self.player.moneybag = 0 #resets moneybag
             self.map_data = [] #resets map
             self.player.lives = 3 #resets healthbar
+            self.wave_interval = 10000
+            self.respawn_timer = 0
+            self.respawn_interval = 10000
+
             with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #recreating map
                 for line in f:
                     print(line) 
@@ -389,39 +400,40 @@ class Game:
         # Pause or unpause the game when 'P' key is pressed
         self.paused = not self.paused
 
-    def respawn_map(self):
-        for sprite in self.all_sprites:
-            sprite.kill() # Remove all existing sprites
+    def respawn_map(self): #get player to respawn
+        #self.all_sprites.empty()  # Clear all sprites
+        for s in self.coins:
+            s.kill()
         
-        self.map_data = []
         
 
         
-        self.load_data()
-        with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #recreating map
-            for line in f:
-                print(line) 
-                self.map_data.append(line)
-            # repopulate the level with stuff
-            for row, tiles in enumerate(self.map_data):
-                print(row)
-                for col, tile in enumerate(tiles):
-                    print(col)
-                    if tile == '1':
-                        print("a wall at", row, col)
-                        Wall(self, col, row)
+        player_position = None  # Store player's current position
+        with open(path.join(self.game_folder, 'map2.txt'), 'rt') as f:
+            for row, line in enumerate(f):
+                self.map2_data.append(line.strip())
+                for col, tile in enumerate(line.strip()):
                     if tile == 'P':
-                        self.player = Player(self, col, row)
-                    if tile == '2':
-                        self.player = Coin(self, col, row)
-                    if tile == 'M':
-                        self.mob = Mob(self, col, row)
-                    if tile == '3':
-                        self.player = PowerUp(self, col, row)
-                    if tile == '4':
-                        Vault(self, col, row)
-                    if tile == 'H':
-                        HealthRegen(self, col, row) #H in map.txt will print a vault
+                        player_position = (col, row)  # Store player's position
+    # Repopulate the level with stuff
+        for row, tiles in enumerate(self.map2_data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    Wall(self, col, row)
+                if tile == '2':
+                    Coin(self, col, row)
+                if tile == 'M':
+                    Mob(self, col, row)
+                if tile == '3':
+                    PowerUp(self, col, row)
+                if tile == '4':
+                    Vault(self, col, row)
+                if tile == 'H':
+                    HealthRegen(self, col, row)
+        # if player_position:  # If player's position is found in the map
+        #     self.player.kill()
+        #     self.player.rect.topleft = (player_position[0] * TILESIZE, player_position[1] * TILESIZE)  # Reset player position
+
 
     
 # Instantiate the game...
