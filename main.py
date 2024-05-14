@@ -247,6 +247,7 @@ class Game:
         self.restart() #restarts game
         self.all_sprites.update() #updates every single sprite
         
+        
 
     
     def draw_grid(self): #gridlines for game
@@ -300,7 +301,15 @@ class Game:
                     self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
 
                 time_remaining = max(0, int((self.wave_interval - self.wave_timer)))
-                self.draw_text(self.screen, str(time_remaining / 1000 ), 50, YELLOW, 27, 1.25)
+                if time_remaining == 0:
+
+                    self.wave_interval = 10000
+                    self.wave_timer = 0
+                    self.wave_timer += self.dt * 1000
+
+                    time_remaining = max(0, int((self.wave_interval - self.wave_timer)))
+                
+                #self.draw_text(self.screen, str(time_remaining / 1000 ), 50, YELLOW, 27, 1.25)
                 
                     
 
@@ -361,6 +370,9 @@ class Game:
                     waiting = False
 
     def restart(self): #restarts entire game by clearing variables/resetting map, whenever R is pressed 
+        self.respawn_timer = 0
+        self.respawn_interval = 10000
+        
         keys = pg.key.get_pressed()
         if keys[pg.K_r]:
             for s in self.all_sprites:
@@ -368,10 +380,21 @@ class Game:
             self.player.moneybag = 0 #resets moneybag
             self.map_data = [] #resets map
             self.player.lives = 3 #resets healthbar
-            self.wave_interval = 10000
-            self.respawn_timer = 0
-            self.respawn_interval = 10000
 
+            
+            self.wave_timer = 0
+            self.wave_interval = 10000
+            self.wave_count = 0
+
+            self.respawn_timer = 0
+    
+
+        
+            
+            
+            
+            
+            
             with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #recreating map
                 for line in f:
                     print(line) 
@@ -396,6 +419,15 @@ class Game:
                         Vault(self, col, row)
                     if tile == 'H':
                         HealthRegen(self, col, row) #H in map.txt will print a vault
+            
+            # self.wave_count = 0
+            # self.wave_timer = 0
+            # self.wave_interval = 10000  # 10 seconds in milliseconds
+            # self.wave_count = 0
+            
+
+
+
     def pass_function(self):
         # Pause or unpause the game when 'P' key is pressed
         self.paused = not self.paused
@@ -404,6 +436,7 @@ class Game:
         #self.all_sprites.empty()  # Clear all sprites
         for s in self.coins:
             s.kill()
+        
         
         
 
