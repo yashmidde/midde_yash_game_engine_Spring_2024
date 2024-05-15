@@ -130,7 +130,9 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
                 print("You just got powered up")
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1 #subtracts life when collding with mob
-            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 50:
+            if str(hits[0].__class__.__name__) == "Mob2":
+                self.lives -= 1 #subtracts life when collding with mob
+            if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 30:
                 self.vaulthit += 1 
             if str(hits[0].__class__.__name__) == "HealthRegen" and self.lives <= 3:
                 self.lives += 1
@@ -164,6 +166,8 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
         if self.collide_with_group(self.game.coins, True):
             self.moneybag =+ 1
         if self.collide_with_group(self.game.mobs, True):
+            self.lives -= 1
+        if self.collide_with_group(self.game.mobs2, True):
             self.lives -= 1
         self.collide_with_group(self.game.health_regen, True)
         
@@ -236,6 +240,7 @@ class PewPew(pg.sprite.Sprite): #class for projectiles
     def update(self):
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.mobs, True)
+        self.collide_with_group(self.game.mobs2, True)
         self.rect.y -= self.speed
 
 class Wall(pg.sprite.Sprite):
@@ -281,7 +286,51 @@ class Mob(pg.sprite.Sprite): #class for enemies
             if hits:
                 self.vy *= -1
                 self.rect.y = self.y
-    
+    def update(self): #makes mob follow player
+        # self.rect.x += 1
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
+        
+        if self.rect.x < self.game.player.rect.x:
+            self.vx = 100
+        if self.rect.x > self.game.player.rect.x:
+            self.vx = -100    
+        if self.rect.y < self.game.player.rect.y:
+            self.vy = 100
+        if self.rect.y > self.game.player.rect.y:
+            self.vy = -100
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
+
+class Mob2(pg.sprite.Sprite): #class for enemies
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.mobs2
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((64, 64))
+        self.image = game.mob2_img
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.vx, self.vy = 100, 100
+        self.x = x * 32
+        self.y = y * 32
+        self.speed = 10
+    def collide_with_walls(self, dir): #mob collision with wall
+        if dir == 'x':
+            # print('colliding on the x')
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            if hits:
+                self.vx *= -1
+                self.rect.x = self.x
+        if dir == 'y':
+            # print('colliding on the y')
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            if hits:
+                self.vy *= -1
+                self.rect.y = self.y
     def update(self): #makes mob follow player
         # self.rect.x += 1
         self.x += self.vx * self.game.dt

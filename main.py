@@ -164,6 +164,7 @@ class Game:
         self.wall_img = pg.image.load(path.join(self.img_folder, 'wall.png')).convert_alpha()
         self.player_img = pg.image.load(path.join(self.img_folder, 'Wizard.png')).convert_alpha()
         self.mob_img = pg.image.load(path.join(self.img_folder, 'mob.png')).convert_alpha()
+        self.mob2_img = pg.image.load(path.join(self.img_folder, 'mobtwo.png')).convert_alpha()
         self.vault_img = pg.image.load(path.join(self.img_folder, 'chest.png')).convert_alpha()
         self.heart_img = pg.image.load(path.join(self.img_folder, 'heart.png')).convert_alpha()
         self.bell_img = pg.image.load(path.join(self.img_folder, 'theBell.png')).convert_alpha()
@@ -192,6 +193,7 @@ class Game:
         self.power_ups = pg.sprite.Group()
         self.health_regen = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
+        self.mobs2 = pg.sprite.Group()
         self.pew_pews = pg.sprite.Group()
         self.vault = pg.sprite.Group()
         for row, tiles in enumerate(self.map_data):
@@ -207,11 +209,15 @@ class Game:
                 if tile == '3':
                     self.player = PowerUp(self, col, row) #3 in map.txt will print a coin
                 if tile == 'M':
-                    self.mob = Mob(self, col, row) #M in map.txt will print a mob
+                    Mob(self, col, row) #M in map.txt will print a mob
                 if tile == '4':
                     Vault(self, col, row) #4 in map.txt will print a vault
                 if tile == 'H':
                     HealthRegen(self, col, row) #H in map.txt will print a vault
+                if tile == 'U':
+                    self.mob2 = Mob2(self, col, row)
+
+                
 
 
     #method which runs the whole game
@@ -233,7 +239,7 @@ class Game:
 
 
                 if respawn_timer >= respawn_interval:
-                    self.respawn_map()  # Respawn the map
+                    self.wave_one()  # Respawn the map
                     respawn_timer = 0 
                 
 
@@ -370,10 +376,11 @@ class Game:
                     waiting = False
 
     def restart(self): #restarts entire game by clearing variables/resetting map, whenever R is pressed 
+        keys = pg.key.get_pressed()
+
         self.respawn_timer = 0
         self.respawn_interval = 10000
-        
-        keys = pg.key.get_pressed()
+
         if keys[pg.K_r]:
             for s in self.all_sprites:
                 s.kill() #kills all existing sprites to save data
@@ -381,19 +388,9 @@ class Game:
             self.map_data = [] #resets map
             self.player.lives = 3 #resets healthbar
 
-            
-            self.wave_timer = 0
-            self.wave_interval = 10000
-            self.wave_count = 0
 
-            self.respawn_timer = 0
+
     
-
-        
-            
-            
-            
-            
             
             with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #recreating map
                 for line in f:
@@ -419,6 +416,8 @@ class Game:
                         Vault(self, col, row)
                     if tile == 'H':
                         HealthRegen(self, col, row) #H in map.txt will print a vault
+                    if tile == 'U':
+                        self.mobs2 = Mob2(self, col, row)
             
             # self.wave_count = 0
             # self.wave_timer = 0
@@ -432,14 +431,10 @@ class Game:
         # Pause or unpause the game when 'P' key is pressed
         self.paused = not self.paused
 
-    def respawn_map(self): #get player to respawn
+    def wave_one(self): #get player to respawn
         #self.all_sprites.empty()  # Clear all sprites
         for s in self.coins:
             s.kill()
-        
-        
-        
-
         
         player_position = None  # Store player's current position
         with open(path.join(self.game_folder, 'map2.txt'), 'rt') as f:
@@ -463,9 +458,15 @@ class Game:
                     Vault(self, col, row)
                 if tile == 'H':
                     HealthRegen(self, col, row)
+                if tile == 'U':
+                    self.mobs2 = Mob2(self, col, row)
+    
         # if player_position:  # If player's position is found in the map
         #     self.player.kill()
         #     self.player.rect.topleft = (player_position[0] * TILESIZE, player_position[1] * TILESIZE)  # Reset player position
+
+
+
 
 
     
