@@ -131,7 +131,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
             if str(hits[0].__class__.__name__) == "Mob":
                 self.lives -= 1 #subtracts life when collding with mob
             if str(hits[0].__class__.__name__) == "Mob2":
-                self.lives -= 1 #subtracts life when collding with mob
+                self.lives -= 2 #subtracts life when collding with mob
             if str(hits[0].__class__.__name__) == "Vault" and self.moneybag == 30:
                 self.vaulthit += 1 
             if str(hits[0].__class__.__name__) == "HealthRegen" and self.lives <= 3:
@@ -168,7 +168,7 @@ class Player(pg.sprite.Sprite): #sprite that the player controls
         if self.collide_with_group(self.game.mobs, True):
             self.lives -= 1
         if self.collide_with_group(self.game.mobs2, True):
-            self.lives -= 1
+            self.lives -= 2
         self.collide_with_group(self.game.health_regen, True)
         
         
@@ -304,12 +304,12 @@ class Mob(pg.sprite.Sprite): #class for enemies
         self.rect.y = self.y
         self.collide_with_walls('y')
 
-class Mob2(pg.sprite.Sprite): #class for enemies
+class Mob2(pg.sprite.Sprite): #bigger/stronger mob
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs2
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.Surface((64, 64))
+        self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image = game.mob2_img
         self.rect = self.image.get_rect()
         self.x = x

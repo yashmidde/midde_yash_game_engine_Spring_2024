@@ -18,16 +18,18 @@ feedback: coin collection/colliding enemy (lose health)
 rules: health bar, can't collide with enemies
 freedom:
 
-ideas:
+Brainstorm #1:
+
 projectile
 startscreen/death screen/end screen (with restart button)
 health bar
 vault (after collecting all the coins, the player has to reach vault to win game)
---------------------------------------------------------------------------------------------
 
 
 
-5 things fun:
+Brainstorm #2:
+
+5 things fun-
 Collecting all the coins and getting back to the vault
 Trying to avoid mobs and not die
 Shooting mobs with projectiles
@@ -36,7 +38,7 @@ The map/sprites
 
 
 
-Ideas:
+Brainstorm #3:
 
 - Moving camera up, obstacles/mobs get progressively harder with final boss mob at the end 
     -adds fun because it creates an element of progress and progressing difficulty for the player
@@ -48,16 +50,28 @@ Ideas:
     - "loadout" with differen tools (pickaxe, grenade, etc.)
 - environment hazards (fire, water, trees)
     - adds fun because it creates a realistic element and also offers more unique gameplay experiences
-
-
-release version
-- a way to 'spend' your coins 
+- - a way to 'spend' your coins 
     - adds fun because it offers a reward for the player that they can continue over time and actually use
     - ex: extra armor, different tools, different skins
     - game should be continuous; player should be able to "pause" and go to an item shop to purchase 
+
+----------------------------------------------------------------------------------------------
+
+Alpha:
+- Health bar
+- Powerups (health/speedboost)
+- Restart function
+- Start/win/death screen
+- The vault
+- Projectiles
+
+Beta:
+- Item shop
+
+Release:
+- Waves of mobs, increasing difficulty
+
 '''
-
-
 
 # creating a class called game
 class Game:
@@ -75,7 +89,7 @@ class Game:
         #load memory from hardrive
          # Initialization code...
 
-        # Define the items available in the shop with their prices. Credit to AI
+        # Define the items available in the shop with their prices (Credit to ChatGPT)
         self.shop_items = {
             "Armor (B)": 3,
             "Wand (M)": 5,
@@ -87,16 +101,10 @@ class Game:
         # Initialize player's currency
         self.moneybag = 0
         self.wave_timer = 0
-        self.wave_interval = 10000  # 10 seconds in milliseconds
         self.wave_count = 0
 
-
-    
-
-
-
-    def show_item_shop(self): #Credit to AI          
-        # Display the item shop on the screen
+    def show_item_shop(self):          
+        # Display the item shop on the screen (Credit to ChatGPT)
         self.paused = True
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "Item Shop", 64, WHITE, 4, 5)
@@ -123,12 +131,6 @@ class Game:
             self.player.moneybag -= 3
             self.player.lives += 3
 
-            
-        
-
-            
-            #if item == "Armor":
-                #self.moneybag -= 3
         pg.display.flip()
         self.wait_for_key()
     
@@ -138,7 +140,6 @@ class Game:
             print("You just bought a wand")
             self.draw_text(self.screen, f"New Balance: {self.player.moneybag - 5}", 32, WHITE, 25, 20)
             self.player.moneybag -= 5
-            
             
         pg.display.flip()
         self.wait_for_key()
@@ -150,6 +151,8 @@ class Game:
             print("You just bought a potion")
             self.draw_text(self.screen, f"New Balance: {self.player.moneybag - 5}", 32, WHITE, 25, 20)
             self.player.moneybag -= 5
+
+        #potion has not yet beena added
             
             
         pg.display.flip()
@@ -170,6 +173,7 @@ class Game:
         self.bell_img = pg.image.load(path.join(self.img_folder, 'theBell.png')).convert_alpha()
         self.map_data = []
         self.map2_data = []
+        self.map3_data = []
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
@@ -183,6 +187,10 @@ class Game:
             for line in f:
                 print(line) 
                 self.map2_data.append(line)
+        with open(path.join(self.game_folder, 'map3.txt'), 'rt') as f: #connecting map3.txt to main code, printing map
+            for line in f:
+                print(line) 
+                self.map3_data.append(line)
 
     # Create run method which runs the whole game
     def new(self):
@@ -218,15 +226,14 @@ class Game:
                     self.mob2 = Mob2(self, col, row)
 
                 
-
-
     #method which runs the whole game
     def run(self): 
         self.playing = True
         respawn_timer = 0
         respawn_interval = 10000
+        respawntwo_interval = 20000
 
-        while self.playing:
+        while self.playing: #Credit to ChatGPT for respawn code
             self.dt = self.clock.tick(FPS) / 1000
             self.events()#input
 
@@ -242,9 +249,11 @@ class Game:
                     self.wave_one()  # Respawn the map
                     respawn_timer = 0 
                 
+                if respawn_timer >= respawntwo_interval:
+                    self.wave_two()
+                    respawn_timer = 0
 
-
-
+                
     def quit(self): #closes window in Windows
          pg.quit()
          sys.exit()
@@ -253,8 +262,6 @@ class Game:
         self.restart() #restarts game
         self.all_sprites.update() #updates every single sprite
         
-        
-
     
     def draw_grid(self): #gridlines for game
          for x in range(0, WIDTH, TILESIZE):
@@ -300,24 +307,11 @@ class Game:
                     self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
 
                 
-                if self.player.vaulthit >= 1 and self.player.moneybag == 10: #vaulthit is variable used when player reaches vault
+                if self.player.vaulthit >= 1 and self.player.moneybag >= 20:  #vaulthit is variable used when player reaches vault
                     #win screen
                     self.screen.fill(BGCOLOR)
                     self.draw_text(self.screen, str("You WON!"), 100, WHITE, 10, 9.5) #win screen
                     self.draw_text(self.screen, str("Press R to play again"), 50, WHITE, 10, 14)
-
-                time_remaining = max(0, int((self.wave_interval - self.wave_timer)))
-                if time_remaining == 0:
-
-                    self.wave_interval = 10000
-                    self.wave_timer = 0
-                    self.wave_timer += self.dt * 1000
-
-                    time_remaining = max(0, int((self.wave_interval - self.wave_timer)))
-                
-                #self.draw_text(self.screen, str(time_remaining / 1000 ), 50, YELLOW, 27, 1.25)
-                
-                    
 
                 pg.display.flip()
 
@@ -362,7 +356,6 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
     
-    
 
     def wait_for_key(self): #function so that game starts when player hits any key
         waiting = True
@@ -378,8 +371,10 @@ class Game:
     def restart(self): #restarts entire game by clearing variables/resetting map, whenever R is pressed 
         keys = pg.key.get_pressed()
 
+        #resetting all respawn related variables
         self.respawn_timer = 0
         self.respawn_interval = 10000
+        self.respawntwo_interval = 20000
 
         if keys[pg.K_r]:
             for s in self.all_sprites:
@@ -388,10 +383,6 @@ class Game:
             self.map_data = [] #resets map
             self.player.lives = 3 #resets healthbar
 
-
-
-    
-            
             with open(path.join(self.game_folder, 'map.txt'), 'rt') as f: #recreating map
                 for line in f:
                     print(line) 
@@ -417,7 +408,7 @@ class Game:
                     if tile == 'H':
                         HealthRegen(self, col, row) #H in map.txt will print a vault
                     if tile == 'U':
-                        self.mobs2 = Mob2(self, col, row)
+                        Mob2(self, col, row)
             
             # self.wave_count = 0
             # self.wave_timer = 0
@@ -436,14 +427,14 @@ class Game:
         for s in self.coins:
             s.kill()
         
-        player_position = None  # Store player's current position
+        player_position = None  # Store player's current position (Credit to ChatGPT)
         with open(path.join(self.game_folder, 'map2.txt'), 'rt') as f:
             for row, line in enumerate(f):
                 self.map2_data.append(line.strip())
                 for col, tile in enumerate(line.strip()):
                     if tile == 'P':
-                        player_position = (col, row)  # Store player's position
-    # Repopulate the level with stuff
+                        player_position = (col, row) 
+    # Creates the new wave by printing map2
         for row, tiles in enumerate(self.map2_data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
@@ -459,7 +450,40 @@ class Game:
                 if tile == 'H':
                     HealthRegen(self, col, row)
                 if tile == 'U':
-                    self.mobs2 = Mob2(self, col, row)
+                    Mob2(self, col, row)
+        
+        
+    def wave_two(self):
+    
+        for s in self.coins:
+            s.kill()
+            
+        player_position = None  # Store player's current position
+        with open(path.join(self.game_folder, 'map3.txt'), 'rt') as f:
+            for row, line in enumerate(f):
+                self.map2_data.append(line.strip())
+                for col, tile in enumerate(line.strip()):
+                    if tile == 'P':
+                        player_position = (col, row)  # Store player's position
+        # Repopulate the level with stuff
+        for row, tiles in enumerate(self.map3_data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    Wall(self, col, row)
+                if tile == '2':
+                    Coin(self, col, row)
+                if tile == 'M':
+                    Mob(self, col, row)
+                if tile == '3':
+                     PowerUp(self, col, row)
+                if tile == '4':
+                    Vault(self, col, row)
+                if tile == 'H':
+                    HealthRegen(self, col, row)
+                if tile == 'U':
+                        Mob2(self, col, row)
+            
+
     
         # if player_position:  # If player's position is found in the map
         #     self.player.kill()
